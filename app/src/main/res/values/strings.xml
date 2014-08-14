@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">SuggestionsToggle</string>
-    <string name="app_description">While in text fields quickly toggle between keyboard suggestions enabled/disabled by double tapping anywhere in the text field</string>
+    <string name="app_name">Suggestions Toggle</string>
+    <string name="app_description">Quickly disable/enable keyboard suggestions in text boxes by double taping the text box.</string>
 </resources>
