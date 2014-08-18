@@ -59,10 +59,9 @@ public class XposedMod extends XC_MethodHook implements IXposedHookLoadPackage {
                                 if (inputType == NOT_INITIALIZED) {
                                     // save original inputtype
                                     setAdditionalInstanceField(editText, INPUTTYPE, editText.getInputType());
-
                                     if (suggestionsDisabled(editText.getInputType())) {
                                         // enable suggestions if disabled
-                                        editText.setInputType(editText.getInputType() & ~0x80090);
+                                        editText.setInputType(editText.getInputType() & ~getMask());
                                         // keep multiline
                                         editText.setSingleLine(false);
                                     } else {
@@ -79,10 +78,12 @@ public class XposedMod extends XC_MethodHook implements IXposedHookLoadPackage {
                             }
 
                             private boolean suggestionsDisabled(int inputType) {
-                                // TYPE_TEXT_FLAG_NO_SUGGESTIONS    = 0x80000
-                                // TYPE_TEXT_PASSWORD               = 0x80
-                                // TYPE_TEXT_VISIBLE_PASSWORD       = 0x90
-                                return (inputType & 0x80090) > 0;
+                                return (inputType & getMask()) > 0;
+                            }
+
+                            private int getMask() {
+                                return InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+                                        | InputType.TYPE_TEXT_VARIATION_PASSWORD;
                             }
                         });
 
