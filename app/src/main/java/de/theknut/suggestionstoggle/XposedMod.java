@@ -21,6 +21,7 @@ public class XposedMod extends XC_MethodHook implements IXposedHookLoadPackage {
     private static String ISHOOKED = "ISHOOKED";
     private static String INPUTTYPE = "INPUTTYPE";
     private static int NOT_INITIALIZED = -1;
+    private static long lastDoubleTap = -1;
 
     @Override
     public void handleLoadPackage(LoadPackageParam loadPackageParam) throws Throwable {
@@ -55,6 +56,8 @@ public class XposedMod extends XC_MethodHook implements IXposedHookLoadPackage {
 
                             @Override
                             public boolean onDoubleTap(MotionEvent e) {
+                                if (e.getEventTime() - lastDoubleTap < 750) return false;
+
                                 int inputType = (Integer) getAdditionalInstanceField(editText, INPUTTYPE);
                                 if (inputType == NOT_INITIALIZED) {
                                     // save original inputtype
@@ -74,6 +77,8 @@ public class XposedMod extends XC_MethodHook implements IXposedHookLoadPackage {
                                     // we are done with this EditText
                                     unhookView((EditText) param.thisObject);
                                 }
+
+                                lastDoubleTap = e.getEventTime();
                                 return true;
                             }
 
